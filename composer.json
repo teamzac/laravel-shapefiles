@@ -1,0 +1,44 @@
+{
+    "name": "teamzac/laravel-shapefiles",
+    "description": "A wrapper for gasparesganga/php-shapefile with a Laravel-ish collections API",
+    "keywords": [
+        "laravel", 
+        "shapefile"
+    ],
+    "homepage": "https://github.com/teamzac/laravel-shapefiles",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Chad Janicek",
+            "email": "chad@zactax.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "gasparesganga/php-shapefile": "^3.4",
+        "illuminate/support": "^7.0|^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0",
+        "phpunit/phpunit": "^8.0|^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "TeamZac\\LaravelShapefiles\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TeamZac\\LaravelShapefiles\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
