@@ -19,7 +19,7 @@ $reader = new TeamZac\LaravelShapefiles\Reader('file_or_directory_path_here');
 
 $reader->count(); // total number of records
 $reader->each(function($geometry) {
-	// do something
+    // do something
 });
 ```
 
@@ -30,13 +30,13 @@ When iterating in the original package, you'd receive an instance of ```Shapefil
 ```php
 ...
 $reader->each(function($geometry) {
-	$geometry->asGeoJson(); // passes through to the getGeoJSON() method with the "as" verbiage commonly used in Laravel
-	$geometry->asJson(); // a convenience method that runs the GeoJSON through json_decode first
-	$geometry->getData('ID'); // allows retreival of a specific key in the data array
-	$geometry->ID; // you can also access the data array as properties on the Geometry class
+    $geometry->asGeoJson(); // passes through to the getGeoJSON() method with the "as" verbiage commonly used in Laravel
+    $geometry->asJson(); // a convenience method that runs the GeoJSON through json_decode first
+    $geometry->getData('ID'); // allows retreival of a specific key in the data array
+    $geometry->ID; // you can also access the data array as properties on the Geometry class
 
-	$geometry->getDataArray(); // methods are passed through to the underlying Shapefile\Geometry\Geometry class
-	$geometry->getRaw(); // you can retrieve the underlying Shapefile\Geometry\Geometry class with the getRaw() method
+    $geometry->getDataArray(); // methods are passed through to the underlying Shapefile\Geometry\Geometry class
+    $geometry->getRaw(); // you can retrieve the underlying Shapefile\Geometry\Geometry class with the getRaw() method
 });
 ...
 ```
