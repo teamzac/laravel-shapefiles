@@ -23,6 +23,7 @@ class Reader
 
 	/**
 	 * Create a new shapefile reader 
+	 *
 	 * @param string $fileOrDirectory
 	 */
 	public function __construct($fileOrDirectory)
@@ -39,6 +40,11 @@ class Reader
 		});
 	}
 
+	/**
+	 * Return the total number of features in the shapefile
+	 *
+	 * @return int
+	 */
 	public function count() 
 	{
 		return $this->reader->getTotRecords();
@@ -55,8 +61,9 @@ class Reader
 	/**
 	 * Take a directory and return the .shp file inside of it
 	 * 
-	 * @param string $directory
-	 * @return string
+	 * @param string $directory 
+	 * @return string 				returns the full path of the .shp file
+	 * @throws Exception 			when no .shp file is found
 	 */
 	protected function convertDirectoryToShapefile($directory)
 	{
