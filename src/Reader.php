@@ -40,6 +40,11 @@ class Reader
 		});
 	}
 
+	public function getOriginal() 
+	{
+		return $this->reader;
+	}
+
 	/**
 	 * Return the total number of features in the shapefile
 	 *
