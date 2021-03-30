@@ -1,6 +1,6 @@
 # A Laravel Collection style API for gasparesganga/php-shapefile
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/team-zac/laravel-shapefiles.svg?style=flat-square)](https://packagist.org/packages/team-zac/laravel-shapefiles)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/teamzac/laravel-shapefiles.svg?style=flat-square)](https://packagist.org/packages/teamzac/laravel-shapefiles)
 
 The [gasparesganga/php-shapefile](https://www.github.com/gasparesganga/php-shapefile) package is extremely handy for working directly with Shapefiles, but we work mostly in Laravel and prefer the collection-style APIs found throughout. This package simply wraps the original ShapefileReader class in a LazyCollection to make iterating on it a bit more familiar.
 
