@@ -82,6 +82,13 @@ class Reader
 	 */
 	protected function convertDirectoryToShapefile($directory)
 	{
+		// search the top level directory first
+		$dotShpFiles = glob($directory.'/*.shp');
+		if (count($dotShpFiles) > 0) {
+			return $dotShpFiles[0];
+		}
+
+		// if no results, search deeply
 		$dotShpFiles = glob($directory.'/**/*.shp');
 		if (count($dotShpFiles) === 0) {
 			throw new \Exception('Unable to find a shapefile in this directory');
