@@ -11,9 +11,29 @@ class Geometry
 	/** @var Shapefile\Geometry\Geometry */
 	protected $geometry;
 
-	public function __construct(\Shapefile\Geometry\Geometry $parent)
+	/** @var Projection */
+	protected $sourceProjection;
+
+	/** @var Projection */
+	protected $destinationProjection;
+
+	/** @var Bool */
+	protected $shouldTransform = false;
+
+	public function __construct(\Shapefile\Geometry\Geometry $parent, $sourceProjection = null, $destinationProjection = null)
 	{
 		$this->geometry = $parent;
+		$this->sourceProjection = $sourceProjection;
+		$this->destinationProjection = $destinationProjection;
+	}
+
+	/** 
+	 * Transform the coordinates before returning the geometry
+	 */
+	public function transform()
+	{
+		$this->shouldTransform = true;
+		return $this;
 	}
 
 	/**
@@ -33,7 +53,18 @@ class Geometry
 	 */
 	public function asGeoJson()
 	{
-		return $this->getGeoJSON();
+		if (! $this->shouldTransform || is_null($this->sourceProjection) || is_null($this->destinationProjection)) {
+			return $this->getGeoJSON();
+		}
+
+		$json = json_decode($this->getGeoJSON());
+		
+		for ($i = 0; $i < count($json->coordinates); $i++) {
+			for ($j = 0; $j < count($json->coordinates[$i]); $j++) {
+				$json->coordinates[$i][$j] = $this->sourceProjection->transformPoint($json->coordinates[$i][$j], $this->destinationProjection);
+			}
+		}
+		return json_encode($json);
 	}
 
 	/** 

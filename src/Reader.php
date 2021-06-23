@@ -16,6 +16,12 @@ class Reader
 	/** @var LazyCollection */
 	protected $collection;
 
+	/** @var Projection */
+	protected $sourceProjection;
+
+	/** @var Projection */
+	protected $destinationProjection;
+
 	public static function make($fileOrDirectory)
 	{
 		return new static($fileOrDirectory);
@@ -26,16 +32,23 @@ class Reader
 	 *
 	 * @param string $fileOrDirectory
 	 */
-	public function __construct($fileOrDirectory)
+	public function __construct($fileOrDirectory, $options = [], $destinationProjection = null)
 	{
 		if (is_dir($fileOrDirectory)) {
 			$fileOrDirectory = $this->convertDirectoryToShapefile($fileOrDirectory);
 		}
 
-		$this->reader = new ShapefileReader($fileOrDirectory);
+		$this->reader = new ShapefileReader($fileOrDirectory, $options);
+
+		if (! is_null($destinationProjection)) {
+			$this->sourceProjection = new Projection($this->reader->getPRJ());
+			$this->destinationProjection = $destinationProjection instanceof Projection ? 
+				$destinationProjection : new Projection($destinationProjection);
+		}
+
 		$this->collection = LazyCollection::make(function() use ($fileOrDirectory) {
 			while ($geometry = $this->reader->fetchRecord()) {
-				yield new Geometry($geometry);
+				yield new Geometry($geometry, $this->sourceProjection, $this->destinationProjection);
 			}
 		});
 	}
@@ -43,6 +56,11 @@ class Reader
 	public function getOriginal() 
 	{
 		return $this->reader;
+	}
+
+	public function getSourceProjection()
+	{
+		return $this->sourceProjection;
 	}
 
 	/**
@@ -53,14 +71,6 @@ class Reader
 	public function count() 
 	{
 		return $this->reader->getTotRecords();
-	}
-
-	/** 
-	 * Pass all uncaught method calls to the underlying collection
-	 */
-	public function __call($method, $parameters)
-	{
-        return $this->forwardCallTo($this->collection, $method, $parameters);
 	}
 
 	/**
@@ -79,5 +89,18 @@ class Reader
             }
         }
         throw new \Exception('Unable to find a shapefile in this directory');
+	}
+
+	/** 
+	 * Pass all uncaught method calls to the underlying collection
+	 */
+	public function __call($method, $parameters)
+	{
+	    return $this->forwardCallTo($this->collection, $method, $parameters);
+	}
+
+	public static function factory()
+	{
+		return new ReaderFactory;
 	}
 }
