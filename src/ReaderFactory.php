@@ -3,6 +3,7 @@
 namespace TeamZac\LaravelShapefiles;
 
 use Shapefile\Shapefile;
+use TeamZac\LaravelShapefiles\Contracts\ReaderContract;
 
 class ReaderFactory
 {
@@ -11,6 +12,14 @@ class ReaderFactory
 
     /** @var Projection */
     protected $destination;
+
+    /** @var ShapefileManager|null */
+    protected $manager;
+
+    public function __construct(?ShapefileManager $manager = null)
+    {
+        $this->manager = $manager;
+    }
 
     /**
      * Allows a maximum field size of 255 bytes instead of 254 bytes in the .dbf file
@@ -201,8 +210,12 @@ class ReaderFactory
         return $this;
     }
 
-    public function make($file)
+    public function make($file): ReaderContract
     {
+        if ($this->manager && $this->manager->isFaking()) {
+            return $this->manager->reader($file);
+        }
+
         return new Reader($file, $this->options, $this->destination);
     }
 }

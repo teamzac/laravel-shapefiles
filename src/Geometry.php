@@ -3,8 +3,9 @@
 namespace TeamZac\LaravelShapefiles;
 
 use Illuminate\Support\Traits\ForwardsCalls;
+use TeamZac\LaravelShapefiles\Contracts\GeometryContract;
 
-class Geometry
+class Geometry implements GeometryContract
 {
 	use ForwardsCalls;
 
@@ -30,7 +31,7 @@ class Geometry
 	/** 
 	 * Transform the coordinates before returning the geometry
 	 */
-	public function transform()
+	public function transform(): static
 	{
 		$this->shouldTransform = true;
 		return $this;
@@ -51,7 +52,7 @@ class Geometry
 	 *
 	 * @return string
 	 */
-	public function asGeoJson()
+	public function asGeoJson(): string
 	{
 		if (! $this->shouldTransform || is_null($this->sourceProjection) || is_null($this->destinationProjection)) {
 			return $this->getGeoJSON();
@@ -72,7 +73,7 @@ class Geometry
 	 *
 	 * @return stdClass
 	 */
-	public function asJson()
+	public function asJson(): \stdClass
 	{
 		return json_decode($this->getGeoJSON());
 	}
@@ -85,7 +86,7 @@ class Geometry
 	 * @param string|null $key
 	 * @return mixed
 	 */
-	public function getData($key = null)
+	public function getData(?string $key = null): mixed
 	{
 		$data = $this->getDataArray();
 

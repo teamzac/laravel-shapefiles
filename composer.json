@@ -39,6 +39,16 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
 
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TeamZac\\LaravelShapefiles\\ShapefileServiceProvider"
+            ],
+            "aliases": {
+                "Shapefiles": "TeamZac\\LaravelShapefiles\\Facades\\Shapefiles"
+            }
+        }
+    },
     "config": {
         "sort-packages": true
     }

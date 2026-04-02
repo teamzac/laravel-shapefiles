@@ -5,8 +5,9 @@ namespace TeamZac\LaravelShapefiles;
 use Illuminate\Support\LazyCollection;
 use Illuminate\Support\Traits\ForwardsCalls;
 use Shapefile\ShapefileReader;
+use TeamZac\LaravelShapefiles\Contracts\ReaderContract;
 
-class Reader
+class Reader implements ReaderContract
 {
 	use ForwardsCalls;
 
@@ -68,9 +69,19 @@ class Reader
 	 *
 	 * @return int
 	 */
-	public function count() 
+	public function count(): int
 	{
 		return $this->reader->getTotRecords();
+	}
+
+	public function getPrj(): ?string
+	{
+		return $this->reader->getPRJ();
+	}
+
+	public function getFieldNames(): array
+	{
+		return array_keys($this->reader->getFields());
 	}
 
 	/**
