@@ -59,23 +59,30 @@ class Geometry implements GeometryContract
 		}
 
 		$json = json_decode($this->getGeoJSON());
-		
-		for ($i = 0; $i < count($json->coordinates); $i++) {
-			for ($j = 0; $j < count($json->coordinates[$i]); $j++) {
-				$json->coordinates[$i][$j] = $this->sourceProjection->transformPoint($json->coordinates[$i][$j], $this->destinationProjection);
-			}
-		}
+		$json->coordinates = $this->transformCoordinates($json->coordinates);
 		return json_encode($json);
 	}
 
-	/** 
+	/**
 	 * Run the GeoJSON string through json_decode
 	 *
 	 * @return stdClass
 	 */
 	public function asJson(): \stdClass
 	{
-		return json_decode($this->getGeoJSON());
+		return json_decode($this->asGeoJson());
+	}
+
+	/**
+	 * Recursively walk coordinates and transform each [x, y] pair
+	 */
+	protected function transformCoordinates(array $coordinates): array
+	{
+		if (count($coordinates) === 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+			return $this->sourceProjection->transformPoint($coordinates, $this->destinationProjection);
+		}
+
+		return array_map(fn($item) => $this->transformCoordinates($item), $coordinates);
 	}
 
 	/**
