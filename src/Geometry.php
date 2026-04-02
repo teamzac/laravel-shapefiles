@@ -86,6 +86,14 @@ class Geometry implements GeometryContract
 	}
 
 	/**
+	 * Get the bounding box for this geometry
+	 */
+	public function getBoundingBox(): ?array
+	{
+		return $this->geometry->getBoundingBox();
+	}
+
+	/**
 	 * Convenience method to access individual items off the data
 	 * array without having to mess with the array itself, or
 	 * simply return the data array with a less wordy syntax

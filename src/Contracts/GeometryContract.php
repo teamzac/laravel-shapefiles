@@ -20,6 +20,11 @@ interface GeometryContract
     public function asJson(): \stdClass;
 
     /**
+     * Get the bounding box for this geometry
+     */
+    public function getBoundingBox(): ?array;
+
+    /**
      * Get data value(s) from the geometry's attribute table
      */
     public function getData(?string $key = null): mixed;

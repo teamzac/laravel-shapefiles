@@ -72,4 +72,38 @@ class FakeGeometryTest extends TestCase
 
         $this->assertSame($geometry, $geometry->transform());
     }
+
+    /** @test */
+    public function it_returns_explicit_bounding_box()
+    {
+        $bbox = ['xmin' => -97.0, 'xmax' => -96.0, 'ymin' => 30.0, 'ymax' => 31.0];
+        $geometry = FakeGeometry::make([], [], $bbox);
+
+        $this->assertEquals($bbox, $geometry->getBoundingBox());
+    }
+
+    /** @test */
+    public function it_derives_bounding_box_from_coordinates()
+    {
+        $geoJson = [
+            'type' => 'Polygon',
+            'coordinates' => [[[-97.0, 30.0], [-96.0, 30.0], [-96.0, 31.0], [-97.0, 31.0], [-97.0, 30.0]]],
+        ];
+        $geometry = FakeGeometry::make([], $geoJson);
+
+        $this->assertEquals([
+            'xmin' => -97.0,
+            'xmax' => -96.0,
+            'ymin' => 30.0,
+            'ymax' => 31.0,
+        ], $geometry->getBoundingBox());
+    }
+
+    /** @test */
+    public function it_returns_null_bounding_box_when_no_coordinates()
+    {
+        $geometry = FakeGeometry::make();
+
+        $this->assertNull($geometry->getBoundingBox());
+    }
 }
